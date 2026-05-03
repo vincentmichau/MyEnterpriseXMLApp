@@ -1,0 +1,5 @@
+PySide6
+lxml
+reportlab
+python-docx
+pyyaml
