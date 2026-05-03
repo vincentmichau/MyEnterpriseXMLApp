@@ -1,11 +1,12 @@
 
 # MyEnterpriseXMLApp – Version 1.1
 
-Dépôt **complet** et **fonctionnel**.
+Dépôt GitHub complet, prêt à l’emploi.
 
-Contient :
+Inclus :
 - Code source intégral
-- Designer WYSIWYG
-- Import XML robuste (reprenable / reset)
 - CI/CD GitHub Actions
-- Packaging EXE / MSI / Portable
+- Build EXE / MSI / Portable
+- Fichiers WiX complets
+
+Statut : Production Ready – v1.1.0
