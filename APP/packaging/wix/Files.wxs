@@ -4,19 +4,22 @@
   <Fragment>
     <Directory Id="TARGETDIR" Name="SourceDir">
       <Directory Id="ProgramFilesFolder">
-        <Directory Id="INSTALLFOLDER" Name="MyEnterpriseXMLApp" />
+        <Directory Id="INSTALLFOLDER" Name="MyEnterpriseXMLApp"/>
       </Directory>
     </Directory>
   </Fragment>
 
   <Fragment>
     <ComponentGroup Id="AppFiles">
-      <Component Id="MainExe"
-                 Guid="{9A5E6E2C-6F1E-4C6A-A1C9-2C3A6E5E3F77}"
-                 Directory="INSTALLFOLDER">
-        <File Id="AppExe"
-              Source="$(var.ProjectDir)dist\MyEnterpriseXMLApp\MyEnterpriseXMLApp.exe"
-              KeyPath="yes" />
+      <Component
+        Id="MainExe"
+        Guid="{9A5E6E2C-6F1E-4C6A-A1C9-2C3A6E5E3F77}"
+        Directory="INSTALLFOLDER">
+
+        <File
+          Id="AppExe"
+          Source="dist\MyEnterpriseXMLApp\MyEnterpriseXMLApp.exe"
+          KeyPath="yes"/>
       </Component>
     </ComponentGroup>
   </Fragment>
