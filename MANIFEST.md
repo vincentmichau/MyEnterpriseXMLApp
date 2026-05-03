@@ -1,16 +1,9 @@
 
-# ALL-IN-ONE GITHUB RELEASE
+# ALL-IN-ONE GITHUB RELEASE – MSI FACTORIZATION FIX
 
-Ce ZIP est la source unique officielle du projet.
-À chaque évolution :
-- Tout est remplacé par un nouveau ZIP all-in-one
-- Rien n'est cumulatif
-- Ce fichier MANIFEST liste toujours l'exhaustivité
+This archive contains the definitive WiX structure fixing:
+- Product.wxs / Files.wxs factorization
+- UTF-8 BOM issues
+- CI validation step for WiX sources
 
-Contenu :
-- MSI WiX complet
-- Langues FR/EN
-- Branding
-- Licence
-- Documentation utilisateur
-- Pack DSI
+This ZIP must fully replace the corresponding directories in the GitHub repository.
