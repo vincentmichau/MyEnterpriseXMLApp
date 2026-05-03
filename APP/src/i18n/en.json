@@ -1,0 +1,13 @@
+
+{
+  "file": "File",
+  "quit": "Exit",
+  "help": "Help",
+  "about": "About",
+  "import_xml": "Import XML",
+  "export": "Export",
+  "language": "Language",
+  "theme": "Theme",
+  "dark": "Dark",
+  "light": "Light"
+}
