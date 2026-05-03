@@ -39,7 +39,7 @@ jobs:
       run: |
         mkdir MyEnterpriseXMLApp_Portable
         xcopy dist\MyEnterpriseXMLApp\* MyEnterpriseXMLApp_Portable /E /I
-        echo. > MyEnterpriseXMLApp_Portable\portable.flag
+        New-Item MyEnterpriseXMLApp_Portable\portable.flag -ItemType File
         mkdir MyEnterpriseXMLApp_Portable\data
 
     - name: Zip Portable version
