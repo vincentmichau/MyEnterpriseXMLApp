@@ -6,9 +6,7 @@ a = Analysis(
     ['../src/main.py'],
     pathex=['..'],
     binaries=[],
-    datas=[
-        ('../web', 'web'),
-    ],
+    datas=[],
     hiddenimports=[],
     hookspath=[],
     runtime_hooks=[],
