@@ -16,6 +16,13 @@ class MainWindow(QMainWindow):
         # ===== Menu =====
         menu_bar = self.menuBar()
 
+file_menu = menu_bar.addMenu("Fichier")
+
+        quit_action = QAction("Quitter", self)
+        quit_action.triggered.connect(self.close)
+
+file_menu.addAction(quit_action)
+
         help_menu = menu_bar.addMenu("Aide")
 
         about_action = QAction("À propos", self)
