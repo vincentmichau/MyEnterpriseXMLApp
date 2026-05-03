@@ -3,19 +3,22 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
   <Product
     Id="*"
-    Name="MyEnterpriseXMLApp"
-    Language="1036"
+    Name="!(loc.ProductName)"
+    Language="!(loc.Culture)"
     Version="2.1.0"
     Manufacturer="Luz Informatique"
     UpgradeCode="{F1B7C9C3-0F6D-4E52-9B9F-5E4A1F9C8C11}">
 
     <Package InstallerVersion="500" Compressed="yes" InstallScope="perMachine" />
 
-    <MajorUpgrade AllowDowngrades="no" Schedule="afterInstallInitialize" />
+    <MajorUpgrade Schedule="afterInstallInitialize" DowngradeErrorMessage="A newer version is already installed." />
 
     <MediaTemplate />
 
-    <!-- UI branding -->
+    <!-- Branding -->
+    <Icon Id="IconInstalled" SourceFile="$(var.ProjectDir)APP\assets\MyEnterpriseXMLApp_installed.ico" />
+    <Property Id="ARPPRODUCTICON" Value="IconInstalled" />
+
     <WixVariable Id="WixUILicenseRtf" Value="$(var.ProjectDir)APP\assets\license.rtf" />
     <WixVariable Id="WixUIBannerBmp" Value="$(var.ProjectDir)APP\assets\banner.bmp" />
     <WixVariable Id="WixUIDialogBmp" Value="$(var.ProjectDir)APP\assets\dialog.bmp" />
@@ -23,15 +26,12 @@
     <Property Id="ARPNOMODIFY" Value="1" />
     <Property Id="ARPNOREPAIR" Value="1" />
 
-    <Icon Id="IconInstalled" SourceFile="$(var.ProjectDir)APP\assets\MyEnterpriseXMLApp_installed.ico" />
-    <Property Id="ARPPRODUCTICON" Value="IconInstalled" />
-
     <Directory Id="TARGETDIR" Name="SourceDir">
       <Directory Id="ProgramFilesFolder">
         <Directory Id="INSTALLFOLDER" Name="MyEnterpriseXMLApp" />
       </Directory>
       <Directory Id="ProgramMenuFolder">
-        <Directory Id="MyProgramMenu" Name="MyEnterpriseXMLApp" />
+        <Directory Id="ProgramMenuDir" Name="MyEnterpriseXMLApp" />
       </Directory>
       <Directory Id="DesktopFolder" />
     </Directory>
@@ -40,27 +40,29 @@
       <Component Id="MainExe" Guid="{9A5E6E2C-6F1E-4C6A-A1C9-2C3A6E5E3F77}">
         <File Id="AppExe" Source="$(var.ProjectDir)dist\MyEnterpriseXMLApp\MyEnterpriseXMLApp.exe" KeyPath="yes">
           <Shortcut Id="DesktopShortcut" Directory="DesktopFolder" Name="MyEnterpriseXMLApp" Advertise="no" />
-          <Shortcut Id="StartMenuShortcut" Directory="MyProgramMenu" Name="MyEnterpriseXMLApp" Advertise="no" />
+          <Shortcut Id="StartMenuShortcut" Directory="ProgramMenuDir" Name="MyEnterpriseXMLApp" Advertise="no" />
         </File>
-        <RemoveFolder Id="RemoveMenu" Directory="MyProgramMenu" On="uninstall" />
+        <RemoveFolder Id="RemoveMenu" Directory="ProgramMenuDir" On="uninstall" />
       </Component>
     </DirectoryRef>
 
-    <!-- Multi-extension association -->
+    <!-- File associations -->
     <DirectoryRef Id="TARGETDIR">
-      <Component Id="AssocFiles" Guid="{6F2A2E5C-0D0B-4C3C-AF3A-55F0D2A50173}">
-        <ProgId Id="MyEnterpriseXMLApp.xml" Description="MyEnterpriseXMLApp XML">
-          <Extension Id="xml"><Verb Id="open" Command="open" Argument="&quot;%1&quot;" /></Extension>
-          <Extension Id="xsd"><Verb Id="open" Command="open" Argument="&quot;%1&quot;" /></Extension>
-          <Extension Id="xslt"><Verb Id="open" Command="open" Argument="&quot;%1&quot;" /></Extension>
+      <Component Id="FileAssoc" Guid="{6F2A2E5C-0D0B-4C3C-AF3A-55F0D2A50173}">
+        <ProgId Id="MyEnterpriseXMLApp.xml" Description="XML Document">
+          <Extension Id="xml" />
+          <Extension Id="xsd" />
+          <Extension Id="xslt" />
         </ProgId>
-        <RegistryValue Root="HKCR" Key="MyEnterpriseXMLApp.xml\shell\open\command" Value="&quot;[INSTALLFOLDER]MyEnterpriseXMLApp.exe&quot; &quot;%1&quot;" Type="string" KeyPath="yes" />
+        <RegistryValue Root="HKCR" Key="MyEnterpriseXMLApp.xml\shell\open\command"
+          Value="&quot;[INSTALLFOLDER]MyEnterpriseXMLApp.exe&quot; &quot;%1&quot;"
+          Type="string" KeyPath="yes" />
       </Component>
     </DirectoryRef>
 
-    <Feature Id="MainFeature" Title="MyEnterpriseXMLApp" Level="1">
+    <Feature Id="MainFeature" Title="!(loc.FeatureMain)" Level="1">
       <ComponentRef Id="MainExe" />
-      <ComponentRef Id="AssocFiles" />
+      <ComponentRef Id="FileAssoc" />
     </Feature>
 
     <UIRef Id="WixUI_Mondo" />
