@@ -1,1 +1,45 @@
-<!-- WiX product file -->
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+
+  <Product
+    Id="*"
+    Name="MyEnterpriseXMLApp"
+    Language="1036"
+    Version="2.0.0"
+    Manufacturer="Luz Informatique"
+    UpgradeCode="PUT-YOUR-STABLE-UPGRADE-GUID-HERE">
+
+    <Package
+      InstallerVersion="500"
+      Compressed="yes"
+      InstallScope="perMachine" />
+
+    <MajorUpgrade
+      DowngradeErrorMessage="Une version plus récente de MyEnterpriseXMLApp est déjà installée." />
+
+    <MediaTemplate />
+
+    <!-- Dossier d’installation -->
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="ProgramFilesFolder">
+        <Directory Id="INSTALLFOLDER" Name="MyEnterpriseXMLApp"/>
+      </Directory>
+    </Directory>
+
+    <!-- Fichiers à installer -->
+    <DirectoryRef Id="INSTALLFOLDER">
+      <Component Id="MainExecutable" Guid="PUT-A-COMPONENT-GUID-HERE">
+        <File
+          Id="MyExe"
+          Source="$(var.ProjectDir)dist\MyEnterpriseXMLApp\MyEnterpriseXMLApp.exe"
+          KeyPath="yes" />
+      </Component>
+    </DirectoryRef>
+
+    <!-- Fonctionnalité -->
+    <Feature Id="MainFeature" Title="MyEnterpriseXMLApp" Level="1">
+      <ComponentRef Id="MainExecutable"/>
+    </Feature>
+
+  </Product>
+</Wix>
