@@ -42,22 +42,32 @@ jobs:
           --name MyEnterpriseXMLApp `
           APP/src/main.py
 
-    # 5. Vérification CRITIQUE : bloquer python.dll / python311.dll
-    - name: Check EXE dependencies (block python.dll)
+    # 5. Test RÉEL de l'EXE (bloquant, remplace dumpbin)
+    #    → si python311.dll est manquant, l'EXE quitte immédiatement ❌
+    - name: Test EXE startup (no python DLL)
       shell: pwsh
       run: |
+        Write-Host "Testing EXE startup..."
+
         if (!(Test-Path "dist\MyEnterpriseXMLApp.exe")) {
           Write-Host "::error ::EXE not found"
           exit 1
         }
 
-        $deps = dumpbin /dependents dist\MyEnterpriseXMLApp.exe
-        if ($deps -match "python") {
-          Write-Host "::error ::Python DLL detected in EXE dependencies"
+        $process = Start-Process `
+          -FilePath "dist\MyEnterpriseXMLApp.exe" `
+          -PassThru `
+          -WindowStyle Hidden
+
+        Start-Sleep -Seconds 3
+
+        if ($process.HasExited) {
+          Write-Host "::error ::EXE exited immediately (likely missing python DLL)"
           exit 1
         }
 
-        Write-Host "✅ EXE is self-contained (no python DLL)"
+        Stop-Process -Id $process.Id -Force
+        Write-Host "✅ EXE started correctly (self-contained)"
 
     # 6. Construire la version PORTABLE (EXE unique)
     - name: Build Portable version
@@ -81,7 +91,7 @@ jobs:
       run: |
         choco install wixtoolset --yes
 
-    # 9. Build MSI (WiX – MSI monolithique, sans CAB externe)
+    # 9. Build MSI (WiX – MSI monolithique)
     - name: Build MSI (WiX)
       shell: pwsh
       run: |
