@@ -35,6 +35,17 @@ jobs:
       run: |
         pyinstaller APP/packaging/pyinstaller.spec
 
+    - name: Build Portable version
+      run: |
+        mkdir MyEnterpriseXMLApp_Portable
+        xcopy dist\MyEnterpriseXMLApp\* MyEnterpriseXMLApp_Portable /E /I
+        echo. > MyEnterpriseXMLApp_Portable\portable.flag
+        mkdir MyEnterpriseXMLApp_Portable\data
+
+    - name: Zip Portable version
+      run: |
+        powershell Compress-Archive MyEnterpriseXMLApp_Portable MyEnterpriseXMLApp_Portable_${{ github.ref_name }}.zip    
+
     # 5. Installer WiX Toolset
     - name: Install WiX Toolset
       run: choco install wixtoolset --yes
@@ -55,3 +66,4 @@ jobs:
         files: |
           dist/MyEnterpriseXMLApp/MyEnterpriseXMLApp.exe
           MyEnterpriseXMLApp_${{ github.ref_name }}.msi
+          MyEnterpriseXMLApp_Portable_${{ github.ref_name }}.zip
