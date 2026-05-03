@@ -1,18 +1,23 @@
-
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
 
-<Product Id="*" Name="MyEnterpriseXMLApp" Language="1036" Version="1.1.0"
-         Manufacturer="Luz Informatique" UpgradeCode="PUT-GUID-HERE">
+  <Product
+    Id="*"
+    Name="MyEnterpriseXMLApp"
+    Language="1036"
+    Version="1.1.0"
+    Manufacturer="Luz Informatique"
+    UpgradeCode="PUT-GUID-HERE">
 
-  <Package InstallerVersion="500" Compressed="yes" InstallScope="perMachine" />
+    <Package InstallerVersion="500" Compressed="yes" InstallScope="perMachine" />
 
-  <MajorUpgrade DowngradeErrorMessage="A newer version is already installed." />
-  <MediaTemplate />
+    <MajorUpgrade DowngradeErrorMessage="A newer version is already installed." />
+    <MediaTemplate />
 
-  <Feature Id="MainFeature" Title="MyEnterpriseXMLApp" Level="1">
-    <ComponentGroupRef Id="MyAppFiles" />
-  </Feature>
+    <Feature Id="MainFeature" Title="MyEnterpriseXMLApp" Level="1">
+      <ComponentGroupRef Id="MyAppFiles" />
+    </Feature>
 
-</Product>
+  </Product>
+
 </Wix>
