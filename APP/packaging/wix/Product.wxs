@@ -7,7 +7,7 @@
     Language="1036"
     Version="1.1.0"
     Manufacturer="Luz Informatique"
-    UpgradeCode="PUT-GUID-HERE">
+    UpgradeCode="A1C9E6E8-6F7B-4E4F-8D91-7F224C3A3C11">
 
     <Package InstallerVersion="500" Compressed="yes" InstallScope="perMachine" />
 
