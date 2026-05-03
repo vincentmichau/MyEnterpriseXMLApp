@@ -1,56 +1,70 @@
+
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-
   <Product
     Id="*"
     Name="MyEnterpriseXMLApp"
     Language="1036"
-    Version="2.0.0"
+    Version="2.1.0"
     Manufacturer="Luz Informatique"
     UpgradeCode="{F1B7C9C3-0F6D-4E52-9B9F-5E4A1F9C8C11}">
 
-    <Package
-      InstallerVersion="500"
-      Compressed="yes"
-      InstallScope="perMachine" />
+    <Package InstallerVersion="500" Compressed="yes" InstallScope="perMachine" />
 
-    <!-- Permet la mise à jour automatique du MSI -->
-    <MajorUpgrade
-      DowngradeErrorMessage="Une version plus récente de MyEnterpriseXMLApp est déjà installée." />
+    <MajorUpgrade AllowDowngrades="no" Schedule="afterInstallInitialize" />
 
     <MediaTemplate />
 
-    <!-- Arborescence d'installation -->
+    <!-- UI branding -->
+    <WixVariable Id="WixUILicenseRtf" Value="$(var.ProjectDir)APP\assets\license.rtf" />
+    <WixVariable Id="WixUIBannerBmp" Value="$(var.ProjectDir)APP\assets\banner.bmp" />
+    <WixVariable Id="WixUIDialogBmp" Value="$(var.ProjectDir)APP\assets\dialog.bmp" />
+
+    <Property Id="ARPNOMODIFY" Value="1" />
+    <Property Id="ARPNOREPAIR" Value="1" />
+
+    <Icon Id="IconInstalled" SourceFile="$(var.ProjectDir)APP\assets\MyEnterpriseXMLApp_installed.ico" />
+    <Property Id="ARPPRODUCTICON" Value="IconInstalled" />
+
     <Directory Id="TARGETDIR" Name="SourceDir">
       <Directory Id="ProgramFilesFolder">
-        <Directory Id="INSTALLFOLDER" Name="MyEnterpriseXMLApp"/>
+        <Directory Id="INSTALLFOLDER" Name="MyEnterpriseXMLApp" />
       </Directory>
+      <Directory Id="ProgramMenuFolder">
+        <Directory Id="MyProgramMenu" Name="MyEnterpriseXMLApp" />
+      </Directory>
+      <Directory Id="DesktopFolder" />
     </Directory>
 
-    <!-- Fichiers installés -->
     <DirectoryRef Id="INSTALLFOLDER">
-      <Component
-        Id="MainExecutable"
-        Guid="{9A5E6E2C-6F1E-4C6A-A1C9-2C3A6E5E3F77}">
-
-        <File
-          Id="MyEnterpriseXMLAppExe"
-          Source="$(var.ProjectDir)dist\MyEnterpriseXMLApp\MyEnterpriseXMLApp.exe"
-          KeyPath="yes" />
-
+      <Component Id="MainExe" Guid="{9A5E6E2C-6F1E-4C6A-A1C9-2C3A6E5E3F77}">
+        <File Id="AppExe" Source="$(var.ProjectDir)dist\MyEnterpriseXMLApp\MyEnterpriseXMLApp.exe" KeyPath="yes">
+          <Shortcut Id="DesktopShortcut" Directory="DesktopFolder" Name="MyEnterpriseXMLApp" Advertise="no" />
+          <Shortcut Id="StartMenuShortcut" Directory="MyProgramMenu" Name="MyEnterpriseXMLApp" Advertise="no" />
+        </File>
+        <RemoveFolder Id="RemoveMenu" Directory="MyProgramMenu" On="uninstall" />
       </Component>
     </DirectoryRef>
 
-    <!-- Fonctionnalité principale -->
-    <Feature
-      Id="MainFeature"
-      Title="MyEnterpriseXMLApp"
-      Level="1">
+    <!-- Multi-extension association -->
+    <DirectoryRef Id="TARGETDIR">
+      <Component Id="AssocFiles" Guid="{6F2A2E5C-0D0B-4C3C-AF3A-55F0D2A50173}">
+        <ProgId Id="MyEnterpriseXMLApp.xml" Description="MyEnterpriseXMLApp XML">
+          <Extension Id="xml"><Verb Id="open" Command="open" Argument="&quot;%1&quot;" /></Extension>
+          <Extension Id="xsd"><Verb Id="open" Command="open" Argument="&quot;%1&quot;" /></Extension>
+          <Extension Id="xslt"><Verb Id="open" Command="open" Argument="&quot;%1&quot;" /></Extension>
+        </ProgId>
+        <RegistryValue Root="HKCR" Key="MyEnterpriseXMLApp.xml\shell\open\command" Value="&quot;[INSTALLFOLDER]MyEnterpriseXMLApp.exe&quot; &quot;%1&quot;" Type="string" KeyPath="yes" />
+      </Component>
+    </DirectoryRef>
 
-      <ComponentRef Id="MainExecutable"/>
-
+    <Feature Id="MainFeature" Title="MyEnterpriseXMLApp" Level="1">
+      <ComponentRef Id="MainExe" />
+      <ComponentRef Id="AssocFiles" />
     </Feature>
 
-  </Product>
+    <UIRef Id="WixUI_Mondo" />
+    <UIRef Id="WixUI_ErrorProgressText" />
 
+  </Product>
 </Wix>
