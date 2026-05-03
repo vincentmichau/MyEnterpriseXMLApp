@@ -1,13 +1,11 @@
 
-# MyEnterpriseXMLApp – v1.1
+# MyEnterpriseXMLApp – Version 1.1
 
-Projet **clé en main** prêt à être versionné sur GitHub.
+Dépôt **complet** et **fonctionnel**.
 
-Fonctionnalités :
-- Import XML industriel (reprenable, annulable)
-- Designer WYSIWYG métier
-- PDF / DOCX professionnels
-- Version portable + installateur
-- CI/CD Windows automatique
-
-Ce dépôt respecte **les règles de l’art GitHub**.
+Contient :
+- Code source intégral
+- Designer WYSIWYG
+- Import XML robuste (reprenable / reset)
+- CI/CD GitHub Actions
+- Packaging EXE / MSI / Portable
