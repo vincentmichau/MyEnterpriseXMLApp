@@ -23,40 +23,78 @@ jobs:
       with:
         python-version: "3.11"
 
-    # 3. Installer les dépendances
+    # 3. Installer les dépendances Python
     - name: Install Python dependencies
+      shell: pwsh
       run: |
         python -m pip install --upgrade pip
         pip install -r APP/requirements.txt
         pip install pyinstaller
 
-    # 4. Build EXE avec PyInstaller
-    - name: Build EXE (PyInstaller)
+    # 4. Build EXE AUTONOME (PyInstaller ONEFILE)
+    - name: Build EXE (PyInstaller onefile)
+      shell: pwsh
       run: |
-        pyinstaller APP/packaging/pyinstaller.spec
+        pyinstaller `
+          --onefile `
+          --windowed `
+          --clean `
+          --name MyEnterpriseXMLApp `
+          APP/src/main.py
 
+    # 5. Vérification CRITIQUE : bloquer python.dll / python311.dll
+    - name: Check EXE dependencies (block python.dll)
+      shell: pwsh
+      run: |
+        if (!(Test-Path "dist\MyEnterpriseXMLApp.exe")) {
+          Write-Host "::error ::EXE not found"
+          exit 1
+        }
+
+        $deps = dumpbin /dependents dist\MyEnterpriseXMLApp.exe
+        if ($deps -match "python") {
+          Write-Host "::error ::Python DLL detected in EXE dependencies"
+          exit 1
+        }
+
+        Write-Host "✅ EXE is self-contained (no python DLL)"
+
+    # 6. Construire la version PORTABLE (EXE unique)
     - name: Build Portable version
+      shell: pwsh
       run: |
-        mkdir MyEnterpriseXMLApp_Portable
-        xcopy dist\MyEnterpriseXMLApp\* MyEnterpriseXMLApp_Portable /E /I
+        New-Item -ItemType Directory -Force MyEnterpriseXMLApp_Portable
+        Copy-Item dist\MyEnterpriseXMLApp.exe MyEnterpriseXMLApp_Portable\
         New-Item MyEnterpriseXMLApp_Portable\portable.flag -ItemType File
-        mkdir MyEnterpriseXMLApp_Portable\data
 
+    # 7. ZIP de la version portable
     - name: Zip Portable version
+      shell: pwsh
       run: |
-        powershell Compress-Archive MyEnterpriseXMLApp_Portable MyEnterpriseXMLApp_Portable_${{ github.ref_name }}.zip    
+        Compress-Archive `
+          MyEnterpriseXMLApp_Portable `
+          MyEnterpriseXMLApp_Portable_${{ github.ref_name }}.zip
 
-    # 5. Installer WiX Toolset
+    # 8. Installer WiX Toolset
     - name: Install WiX Toolset
-      run: choco install wixtoolset --yes
-
-    # 6. Build MSI avec WiX
-    - name: Build MSI (WiX)
+      shell: pwsh
       run: |
-        candle -ext WixUIExtension APP\packaging\wix\Product.wxs APP\packaging\wix\Files.wxs
-        light -ext WixUIExtension Product.wixobj Files.wixobj -o MyEnterpriseXMLApp_${{ github.ref_name }}.msi
+        choco install wixtoolset --yes
 
-    # 7. Publier la Release GitHub avec les binaires
+    # 9. Build MSI (WiX – MSI monolithique, sans CAB externe)
+    - name: Build MSI (WiX)
+      shell: pwsh
+      run: |
+        candle -ext WixUIExtension `
+               APP/packaging/wix/Product.wxs `
+               APP/packaging/wix/Files.wxs
+
+        light  -ext WixUIExtension `
+               Product.wixobj `
+               Files.wixobj `
+               -o MyEnterpriseXMLApp_${{ github.ref_name }}.msi
+
+    # 10. Publier la Release GitHub
     - name: Publish GitHub Release
       uses: softprops/action-gh-release@v2
       with:
@@ -64,6 +102,6 @@ jobs:
         tag_name: ${{ github.ref_name }}
         generate_release_notes: true
         files: |
-          dist/MyEnterpriseXMLApp/MyEnterpriseXMLApp.exe
+          dist/MyEnterpriseXMLApp.exe
           MyEnterpriseXMLApp_${{ github.ref_name }}.msi
           MyEnterpriseXMLApp_Portable_${{ github.ref_name }}.zip
