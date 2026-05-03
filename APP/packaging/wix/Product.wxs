@@ -9,27 +9,21 @@
     Manufacturer="Luz Informatique"
     UpgradeCode="{F1B7C9C3-0F6D-4E52-9B9F-5E4A1F9C8C11}">
 
-    <Package
-      InstallerVersion="500"
-      Compressed="yes"
-      InstallScope="perMachine" />
+    <Package InstallerVersion="500" Compressed="yes" InstallScope="perMachine"/>
 
-    <!-- ✅ MSI AUTONOME : PLUS JAMAIS DE CAB EXTERNE -->
-    <MediaTemplate EmbedCab="yes" />
+    <!-- ✅ MSI AUTONOME : PLUS DE CAB -->
+    <MediaTemplate EmbedCab="yes"/>
 
     <MajorUpgrade
-      DowngradeErrorMessage="A newer version of MyEnterpriseXMLApp is already installed." />
+      DowngradeErrorMessage="A newer version of MyEnterpriseXMLApp is already installed."/>
 
-    <!-- UI -->
-    <UIRef Id="WixUI_Mondo" />
-    <UIRef Id="WixUI_ErrorProgressText" />
+    <UIRef Id="WixUI_Mondo"/>
+    <UIRef Id="WixUI_ErrorProgressText"/>
 
-    <!-- Feature principale -->
     <Feature Id="MainFeature" Title="MyEnterpriseXMLApp" Level="1">
-      <ComponentGroupRef Id="AppFiles" />
+      <ComponentGroupRef Id="AppFiles"/>
     </Feature>
 
   </Product>
 
 </Wix>
-``
