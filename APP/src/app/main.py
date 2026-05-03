@@ -1,53 +1,45 @@
-import sys
-from PySide6.QtWidgets import (
-    QApplication, QMainWindow,
-    QPushButton, QWidget, QVBoxLayout
-)
-from PySide6.QtGui import QAction
 
-from version import APP_VERSION
+import sys, requests
+from PySide6.QtWidgets import QApplication, QMainWindow, QAction, QMessageBox
 from ui.about_dialog import AboutDialog
-
+from ui.preferences_dialog import PreferencesDialog
+from ui.xml_screen import XMLScreen
+from version import APP_VERSION, UPDATE_URL
 
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
+        self.setWindowTitle('MyEnterpriseXMLApp')
+        self.resize(900,600)
 
-        self.setWindowTitle("MyEnterpriseXMLApp")
-        self.resize(800, 600)
+        self.setCentralWidget(XMLScreen())
 
-        # ===== Menu =====
-        menu_bar = self.menuBar()
+        bar = self.menuBar()
+        file = bar.addMenu('Fichier')
+        pref = QAction('Préférences',self); pref.triggered.connect(self.open_prefs)
+        quit = QAction('Quitter',self); quit.triggered.connect(self.close)
+        file.addActions([pref, quit])
 
-        file_menu = menu_bar.addMenu("Fichier")
-        quit_action = QAction("Quitter", self)
-        quit_action.triggered.connect(self.close)
-        file_menu.addAction(quit_action)
+        helpm = bar.addMenu('Aide')
+        about = QAction('À propos',self); about.triggered.connect(lambda: AboutDialog().exec())
+        update = QAction('Vérifier mises à jour',self); update.triggered.connect(self.check_update)
+        helpm.addActions([about, update])
 
-        help_menu = menu_bar.addMenu("Aide")
-        about_action = QAction("À propos", self)
-        about_action.triggered.connect(
-            lambda: AboutDialog(APP_VERSION).exec()
-        )
-        help_menu.addAction(about_action)
+    def open_prefs(self):
+        PreferencesDialog().exec()
 
-        # ===== Central widget =====
-        central_widget = QWidget(self)
-        layout = QVBoxLayout()
-
-        quit_button = QPushButton("Quitter")
-        quit_button.clicked.connect(self.close)
-
-        layout.addStretch()
-        layout.addWidget(quit_button)
-        layout.addStretch()
-
-        central_widget.setLayout(layout)
-        self.setCentralWidget(central_widget)
+    def check_update(self):
+        try:
+            latest = requests.get(UPDATE_URL, timeout=5).json()['tag_name']
+            if latest != APP_VERSION:
+                QMessageBox.information(self,'Mise à jour',f'Nouvelle version disponible: {latest}')
+            else:
+                QMessageBox.information(self,'Mise à jour','Vous êtes à jour')
+        except Exception:
+            QMessageBox.warning(self,'Mise à jour','Impossible de vérifier les mises à jour')
 
 
 def run():
     app = QApplication(sys.argv)
-    window = MainWindow()
-    window.show()
+    w = MainWindow(); w.show()
     sys.exit(app.exec())
