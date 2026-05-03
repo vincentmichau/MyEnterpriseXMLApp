@@ -13,20 +13,45 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - name: Checkout source
+    # 1. Récupérer le code
+    - name: Checkout repository
       uses: actions/checkout@v4
 
+    # 2. Installer Python
     - name: Setup Python
       uses: actions/setup-python@v5
       with:
         python-version: "3.11"
 
-    - name: Install dependencies
+    # 3. Installer les dépendances
+    - name: Install Python dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -r APP/requirements.txt
         pip install pyinstaller
 
-    - name: Build EXE
+    # 4. Build EXE avec PyInstaller
+    - name: Build EXE (PyInstaller)
       run: |
         pyinstaller APP/packaging/pyinstaller.spec
+
+    # 5. Installer WiX Toolset
+    - name: Install WiX Toolset
+      run: choco install wixtoolset --yes
+
+    # 6. Build MSI avec WiX
+    - name: Build MSI (WiX)
+      run: |
+        candle APP\packaging\wix\Product.wxs APP\packaging\wix\Files.wxs
+        light Product.wixobj Files.wixobj -o MyEnterpriseXMLApp_${{ github.ref_name }}.msi
+
+    # 7. Publier la Release GitHub avec les binaires
+    - name: Publish GitHub Release
+      uses: softprops/action-gh-release@v2
+      with:
+        name: MyEnterpriseXMLApp ${{ github.ref_name }}
+        tag_name: ${{ github.ref_name }}
+        generate_release_notes: true
+        files: |
+          dist/MyEnterpriseXMLApp/MyEnterpriseXMLApp.exe
+          MyEnterpriseXMLApp_${{ github.ref_name }}.msi
