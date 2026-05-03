@@ -53,8 +53,8 @@ jobs:
     # 6. Build MSI avec WiX
     - name: Build MSI (WiX)
       run: |
-        candle APP\packaging\wix\Product.wxs APP\packaging\wix\Files.wxs
-        light Product.wixobj Files.wixobj -o MyEnterpriseXMLApp_${{ github.ref_name }}.msi
+        candle -ext WixUIExtension APP\packaging\wix\Product.wxs APP\packaging\wix\Files.wxs
+        light -ext WixUIExtension Product.wixobj Files.wixobj -o MyEnterpriseXMLApp_${{ github.ref_name }}.msi
 
     # 7. Publier la Release GitHub avec les binaires
     - name: Publish GitHub Release
