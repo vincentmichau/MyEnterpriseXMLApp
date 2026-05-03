@@ -19,7 +19,7 @@
 
         <File
           Id="AppExe"
-          Source="dist\MyEnterpriseXMLApp\MyEnterpriseXMLApp.exe"
+          Source="dist/MyEnterpriseXMLApp.exe"
           KeyPath="yes"/>
 
       </Component>
