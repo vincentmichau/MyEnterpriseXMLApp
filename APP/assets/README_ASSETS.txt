@@ -1,0 +1,1 @@
+Icônes et bitmaps MSI (déjà fournis : installed.ico, portable.ico, banner.bmp, dialog.bmp)

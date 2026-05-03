@@ -1,5 +1,1 @@
-
-<WixLocalization xmlns="http://schemas.microsoft.com/wix/2006/localization" Culture="en-US">
-  <String Id="ProductName">MyEnterpriseXMLApp</String>
-  <String Id="FeatureMain">Main application</String>
-</WixLocalization>
+EN MSI localization

@@ -1,0 +1,1 @@
+HKLM\Software\Microsoft\Windows\CurrentVersion\Uninstall
