@@ -1,13 +1,10 @@
-
 {
   "file": "File",
-  "quit": "Exit",
+  "quit": "Quit",
   "help": "Help",
   "about": "About",
   "import_xml": "Import XML",
-  "export": "Export",
-  "language": "Language",
-  "theme": "Theme",
-  "dark": "Dark",
-  "light": "Light"
+  "save_xml": "Save XML",
+  "validate_xsd": "Validate XSD",
+  "language": "Language"
 }

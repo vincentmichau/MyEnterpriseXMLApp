@@ -1,13 +1,10 @@
-
 {
   "file": "Fichier",
   "quit": "Quitter",
   "help": "Aide",
   "about": "À propos",
   "import_xml": "Importer XML",
-  "export": "Exporter",
-  "language": "Langue",
-  "theme": "Thème",
-  "dark": "Sombre",
-  "light": "Clair"
+  "save_xml": "Sauvegarder XML",
+  "validate_xsd": "Valider XSD",
+  "language": "Langue"
 }
